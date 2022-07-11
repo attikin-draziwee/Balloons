@@ -20,6 +20,7 @@ const ttfToWoff2 = require('gulp-ttf2woff2');
 const fontfacegen = require('gulp-fontfacegen');
 
 const files = ['./src/*.html', './src/img/**/*', './src/icons/**/*', './src/sass/**/*'];
+const cssFiles = ['./node_modules/normalize.css/normalize.css', './node_modules/reset.css/reset.css', './src/scss/main.scss'];
 
 gulp.task('clean', () => gulp.src(['./docs', './src/scss/layout/font.scss', '!docs/font'], { read: false })
   .pipe(clean()));
@@ -78,7 +79,7 @@ gulp.task('copy:icons', () => gulp.src('./src/icons/**/*')
   .pipe(gulp.dest('./docs/icons'))
 );
 
-gulp.task('sass', () => gulp.src('./src/scss/main.scss')
+gulp.task('sass', () => gulp.src(cssFiles)
   .pipe(gulpIf(crossEnv === 'dev', gulpMaps.init()))
   .pipe(sassGlob())
   .pipe(sass())
