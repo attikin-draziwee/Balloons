@@ -18,8 +18,9 @@ const svgSprite = require('gulp-svg-sprite');
 const ttfToWoff = require('gulp-ttf2woff');
 const ttfToWoff2 = require('gulp-ttf2woff2');
 const fontfacegen = require('gulp-fontfacegen');
+const pxToRem = require('gulp-smile-px2rem');
 
-const files = ['./src/*.html', './src/img/**/*', './src/icons/**/*', './src/sass/**/*'];
+const files = ['./src/*.html', './src/img/**/*', './src/icons/**/*', './src/scss/**/*', '!src/scss/layout/font.scss'];
 const cssFiles = ['./node_modules/normalize.css/normalize.css', './node_modules/reset.css/reset.css', './src/scss/main.scss'];
 
 gulp.task('clean', () => gulp.src(['./docs', './src/scss/layout/font.scss', '!docs/font'], { read: false })
@@ -84,6 +85,11 @@ gulp.task('sass', () => gulp.src(cssFiles)
   .pipe(sassGlob())
   .pipe(sass())
   .pipe(gulpConcat('main.min.css'))
+  .pipe(pxToRem({
+    drm: 2,
+    rem: 8,
+    one: false
+  }))
   .pipe(gulpIf(crossEnv === 'build', gcmq()))
   .pipe(gulpIf(crossEnv === 'build', cssAutoPrefix({ browsers: ['last 2 versions'], cascade: false })))
   .pipe(gulpIf(crossEnv === 'build', cleanCSS()))
