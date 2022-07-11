@@ -21,7 +21,7 @@ const fontfacegen = require('gulp-fontfacegen');
 
 const files = ['./src/*.html', './src/img/**/*', './src/icons/**/*', './src/sass/**/*'];
 
-gulp.task('clean', () => gulp.src('./docs', { read: false })
+gulp.task('clean', () => gulp.src(['./docs', './src/scss/layout/font.scss', '!docs/font'], { read: false })
   .pipe(clean()));
 
 gulp.task('copy:html', () => gulp.src('./src/*.html')
@@ -41,23 +41,24 @@ gulp.task('copy:img', () => gulp.src('./src/img/**/*')
 
 gulp.task('ttfToWoff2', () => gulp.src('./src/fonts/**/*')
   .pipe(ttfToWoff2())
-  .pipe(gulp.dest('./docs/fonts/'))
+  .pipe(gulp.dest('./src/fonts/converted'))
 );
 
 gulp.task('ttfToWoff', () => gulp.src('./src/fonts/**/*')
   .pipe(ttfToWoff())
-  .pipe(gulp.dest('./docs/fonts'))
+  .pipe(gulp.dest('./src/fonts/converted'))
 );
 
-gulp.task('convertFont', () => gulp.src('./docs/fonts/**/*.{woff,woff2}')
+gulp.task('convertFont', () => gulp.src('./src/fonts/converted/**/*.{woff,woff2}')
   .pipe(fontfacegen({
-    filepath: './docs',
-    filename: 'font.css'
+    filepath: './src/scss/layout',
+    filename: 'font.scss'
   }))
-  .pipe(gulp.dest('./docs/fonts'))
+  .pipe(gulp.dest('./docs/font'))
 );
 
-gulp.task('copy:fonts', gulp.series(gulp.parallel('ttfToWoff', 'ttfToWoff2'), 'convertFont'));
+gulp.task('convertfonts', gulp.series(gulp.parallel('ttfToWoff', 'ttfToWoff2')));
+gulp.task('copy:fonts', gulp.series('convertFont'));
 
 gulp.task('copy:icons', () => gulp.src('./src/icons/**/*')
   .pipe(svgo({
@@ -99,6 +100,6 @@ gulp.task('browser', () => {
   });
 });
 
-gulp.watch(files, gulp.series('clean', 'copy:html', 'copy:img', 'copy:icons', 'sass'));
+gulp.watch(files, gulp.series('clean', 'copy:html', 'copy:img', 'copy:icons', 'copy:fonts', 'sass'));
 
-gulp.task('default', gulp.series('clean', 'copy:html', 'copy:img', 'copy:icons', 'copy:fonts', 'sass', 'browser'));
+gulp.task('default', gulp.series('clean', 'copy:html', 'copy:img', 'copy:icons', 'convertfonts', 'copy:fonts', 'sass', 'browser'));
