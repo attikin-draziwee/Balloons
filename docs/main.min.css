@@ -1,0 +1,8 @@
+body {
+  font-family: sans-serif;
+}
+
+.hero {
+  background-color: #dedede;
+  transform: translateX(-50%);
+}
