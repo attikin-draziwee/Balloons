@@ -19,14 +19,20 @@ const ttfToWoff = require('gulp-ttf2woff');
 const ttfToWoff2 = require('gulp-ttf2woff2');
 const fontfacegen = require('gulp-fontfacegen');
 const pxToRem = require('gulp-smile-px2rem');
+const pug = require('gulp-pug');
 
-const files = ['./src/*.html', './src/img/**/*', './src/icons/**/*', './src/scss/**/*', '!src/scss/layout/font.scss'];
+const files = ['./src/*.pug', './src/img/**/*', './src/icons/**/*', './src/scss/**/*', '!src/scss/layout/font.scss'];
 const cssFiles = ['./node_modules/normalize.css/normalize.css', './node_modules/reset.css/reset.css', './src/scss/main.scss'];
 
-gulp.task('clean', () => gulp.src(['./docs', './src/scss/layout/font.scss', '!docs/font'], { read: false })
+gulp.task('cleanAll', () => gulp.src(['./docs', './src/scss/layout/font.scss', './src/fonts/converted/'], { read: false })
+  .pipe(clean()));
+gulp.task('clean', () => gulp.src(['docs/**/*', './src/scss/layout/font.scss'], { read: true })
   .pipe(clean()));
 
-gulp.task('copy:html', () => gulp.src('./src/*.html')
+gulp.task('pugToHtml', () => gulp.src('./src/*.pug')
+  .pipe(pug({
+    pretty: process.env.NODE_ENV == 'dev' ? true : false
+  }))
   .pipe(gulp.dest('./docs'))
   .pipe(browserSync.reload({ stream: true })));
 
@@ -51,16 +57,15 @@ gulp.task('ttfToWoff', () => gulp.src('./src/fonts/**/*')
   .pipe(gulp.dest('./src/fonts/converted'))
 );
 
-gulp.task('convertFont', () => gulp.src('./src/fonts/converted/**/*.{woff,woff2}')
+gulp.task('convertfonts', gulp.series(gulp.parallel('ttfToWoff', 'ttfToWoff2')));
+
+gulp.task('copy:fonts', () => gulp.src('./src/fonts/converted/**/*.{woff,woff2}')
   .pipe(fontfacegen({
     filepath: './src/scss/layout',
     filename: 'font.scss'
   }))
   .pipe(gulp.dest('./docs/font'))
 );
-
-gulp.task('convertfonts', gulp.series(gulp.parallel('ttfToWoff', 'ttfToWoff2')));
-gulp.task('copy:fonts', gulp.series('convertFont'));
 
 gulp.task('copy:icons', () => gulp.src('./src/icons/**/*')
   .pipe(svgo({
@@ -107,6 +112,6 @@ gulp.task('browser', () => {
   });
 });
 
-gulp.watch(files, gulp.series('clean', 'copy:html', 'copy:img', 'copy:icons', 'copy:fonts', 'sass'));
+gulp.watch(files, gulp.series('clean', 'pugToHtml', 'copy:img', 'copy:icons', 'copy:fonts', 'sass'));
 
-gulp.task('default', gulp.series('clean', 'copy:html', 'copy:img', 'copy:icons', 'convertfonts', 'copy:fonts', 'sass', 'browser'));
+gulp.task('default', gulp.series('cleanAll', 'pugToHtml', 'copy:img', 'copy:icons', 'convertfonts', 'copy:fonts', 'sass', 'browser'));
