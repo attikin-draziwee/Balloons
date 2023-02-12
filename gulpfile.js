@@ -80,21 +80,19 @@ task('js', () => src(JS, { sourcemaps: gulpIf(isProd != 'build', true, false) })
 // Fonts
 task('ttfToWoff2', () => src(`${SRC}/fonts/*.ttf`)
   .pipe(ttfToWoff2())
-  .pipe(dest(`${SRC}/fonts/converted`))
+  .pipe(dest(`${DIST}/fonts`))
 );
 task('ttfToWoff', () => src(`${SRC}/fonts/*.ttf`)
   .pipe(ttfToWoff())
-  .pipe(dest(`${SRC}/fonts/converted`))
+  .pipe(dest(`${DIST}/fonts`))
 );
-task('fontsGenCss', () => src(`${SRC}/fonts/converted/**/*.{woff,woff2}`)
+task('fontsGenCss', () => src(`${DIST}/fonts/**/*.{woff,woff2}`)
   .pipe(fontfacegen({
     filepath: `${SRC}/sass/layout`,
     filename: 'font.scss'
   }))
 );
-task('copy:fonts', () => src(`${SRC}/fonts/converted/**/*`)
-  .pipe(dest(`${DIST}/fonts`)));
-task('fonts', series(parallel('ttfToWoff', 'ttfToWoff2'), 'fontsGenCss', 'copy:fonts'));
+task('fonts', series(parallel('ttfToWoff', 'ttfToWoff2'), 'fontsGenCss'));
 
 
 task('reloading', () => src(DIST)
