@@ -1,0 +1,56 @@
+{
+  "name": "balloons",
+  "version": "1.0.0",
+  "description": "Итоговая работа по курсу: [ссылка](https://stepik.org/course/118223/syllabus) за авторством Дмитрия Фокеева.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "cross-env NODE_ENV=dev gulp",
+    "build": "cross-env NODE_ENV=build gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/attikin-draziwee/Balloons.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/attikin-draziwee/Balloons/issues"
+  },
+  "homepage": "https://github.com/attikin-draziwee/Balloons#readme",
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "browser-sync": "^2.27.11",
+    "cross-env": "^7.0.3",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-if": "^3.0.0",
+    "gulp-imagemin": "7.1",
+    "gulp-pug": "^5.0.0",
+    "gulp-sass": "^5.1.0",
+    "gulp-sass-glob": "^1.1.0",
+    "gulp-svg-sprite": "^2.0.1",
+    "gulp-svgo": "^2.2.1",
+    "gulp-ttf2woff": "^1.1.1",
+    "gulp-ttf2woff2": "^4.0.1",
+    "gulp-uglify": "^3.0.2",
+    "gulp-webp": "^4.0.1",
+    "sass": "^1.58.0"
+  },
+  "browserslist": [
+    "last 2 version",
+    "> 1%",
+    "maintained node versions",
+    "not dead"
+  ],
+  "dependencies": {
+    "normalize.css": "^8.0.1",
+    "reset.css": "^2.0.2"
+  }
+}

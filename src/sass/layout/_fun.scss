@@ -1,0 +1,6 @@
+@function pxToRem($px) {
+  @return calc($px / $font-size) * 1rem;
+}
+@function pxToEm($px, $fz) {
+  @return calc($px / $fz) * 1em;
+}

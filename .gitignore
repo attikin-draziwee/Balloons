@@ -1,0 +1,8 @@
+#folders
+/node_modules
+/src/fonts/**/*
+
+#files
+.DS_Store
+**/.DS_Store
+**/**/.DS_Store
